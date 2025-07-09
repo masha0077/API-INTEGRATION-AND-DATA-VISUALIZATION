@@ -1,0 +1,35 @@
+import pandas as pd
+from fpdf import FPDF
+
+# Read data
+df = pd.read_csv('data.csv')
+
+# Analyze data
+summary = df.groupby('Department')['Score'].agg(['count', 'mean']).reset_index()
+
+# Create PDF
+pdf = FPDF()
+pdf.add_page()
+pdf.set_font("Arial", size=12)
+
+# Title
+pdf.cell(200, 10, txt="Student Performance Report", ln=1, align='C')
+pdf.ln(10)
+
+# Table Header
+pdf.cell(60, 10, "Department", border=1)
+pdf.cell(40, 10, "Count", border=1)
+pdf.cell(40, 10, "Average Score", border=1)
+pdf.ln()
+
+# Table Data
+for _, row in summary.iterrows():
+    pdf.cell(60, 10, row['Department'], border=1)
+    pdf.cell(40, 10, str(row['count']), border=1)
+    pdf.cell(40, 10, f"{row['mean']:.2f}", border=1)
+    pdf.ln()
+
+# Save PDF
+pdf.output("report.pdf")
+
+print("Report generated successfully as 'report.pdf'")
