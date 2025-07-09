@@ -1,0 +1,50 @@
+# Task 4 - Machine Learning Model Implementation
+# Spam Email Detection using Scikit-learn (Naive Bayes Classifier)
+
+# Step 1: Import Required Libraries
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import accuracy_score, classification_report
+
+# Step 2: Load the Dataset
+# You can download a spam.csv dataset from Kaggle or use any available dataset
+df = pd.read_csv("spam.csv", encoding='latin-1')
+df = df[['v1', 'v2']]               # Keep only label and message columns
+df.columns = ['label', 'message']   # Rename columns
+
+# Step 3: Convert Labels to Binary
+df['label_num'] = df.label.map({'ham': 0, 'spam': 1})
+
+# Step 4: Feature Extraction - Convert text to numerical features
+vectorizer = CountVectorizer()
+X = vectorizer.fit_transform(df['message'])  # Features
+y = df['label_num']                          # Target
+
+# Step 5: Split the Dataset
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Step 6: Train the Model
+model = MultinomialNB()
+model.fit(X_train, y_train)
+
+# Step 7: Make Predictions
+y_pred = model.predict(X_test)
+
+# Step 8: Evaluate the Model
+print("✅ Accuracy Score:", accuracy_score(y_test, y_pred))
+print("\n📊 Classification Report:\n")
+print(classification_report(y_test, y_pred))
+
+# Step 9: Test with Custom Input (Optional)
+def predict_message(message):
+    data = vectorizer.transform([message])
+    prediction = model.predict(data)
+    return "Spam" if prediction[0] else "Ham"
+
+# Try a sample
+print("\n💬 Prediction Example:")
+print("Message: 'Congratulations! You won a free ticket to Bahamas'")
+print("Prediction:", predict_message("Congratulations! You won a free ticket to Bahamas"))
