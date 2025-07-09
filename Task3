@@ -1,0 +1,48 @@
+import nltk
+from nltk.chat.util import Chat, reflections
+
+# Pairs: pattern and response
+pairs = [
+    [
+        r"my name is (.*)",
+        ["Hello %1, how can I help you today?"]
+    ],
+    [
+        r"hi|hello|hey",
+        ["Hello!", "Hey there!", "Hi! How can I help you?"]
+    ],
+    [
+        r"what is your name?",
+        ["I'm CodTech Bot, your internship assistant."]
+    ],
+    [
+        r"how are you ?",
+        ["I'm good, thank you! How about you?"]
+    ],
+    [
+        r"sorry (.*)",
+        ["No problem!", "It's okay, don't worry."]
+    ],
+    [
+        r"i'm (.*) doing good",
+        ["Nice to hear that!", "Great!"]
+    ],
+    [
+        r"(.*) help (.*)",
+        ["I can help you. What do you need assistance with?"]
+    ],
+    [
+        r"quit",
+        ["Goodbye! Have a great day."]
+    ],
+]
+
+# Create Chatbot
+def codtech_chatbot():
+    print("Hi! I'm your CodTech Internship Chatbot. Type 'quit' to exit.")
+    chat = Chat(pairs, reflections)
+    chat.converse()
+
+# Run the chatbot
+if __name__ == "__main__":
+    codtech_chatbot()
